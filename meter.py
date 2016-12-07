@@ -1,10 +1,21 @@
+# Simple analog meter driver fot Raspberry Pi using two IO-pins in PWM mode
+#
+# usage: 
+#
+# gm = meter(2,3) # initate new meter using pin 2 as positive and pin 3 as negative terminal (BCM numbering)
+# gm.set(3) # set the meter output to 3.
+#
+#
+
 import RPi.GPIO as IO
 import time
 
 class meter:
 
     def __init__ (self, pinP, pinN):
-        print 'Meter init with pin', pinP, 'as positive and pin' , pinN, 'as negative'
+#        print 'Meter init with pin', pinP, 'as positive and pin' , pinN, 'as negative'
+        self.gain=9 # default, works on my setup
+        self.offset=0
         IO.setwarnings(False)
         IO.setmode(IO.BCM)
         IO.setup(pinP,IO.OUT)
@@ -17,7 +28,12 @@ class meter:
             x=self.limit(-50,50,(9.0*value))
             self.p.ChangeDutyCycle(50+x)
             self.n.ChangeDutyCycle(50-x)
-    
+    def set_gain(gain)
+        self.gain=gain
+        
+def set_gain(offset)
+        self.offset=offset
+        
     def limit(self,lower,upper,x):
         if(lower>upper):
             ul=lower
