@@ -8,7 +8,7 @@
 #
 
 import RPi.GPIO as IO
-import time
+
 
 class meter:
 
@@ -24,14 +24,17 @@ class meter:
         self.n=IO.PWM(pinN,100)
         self.p.start(50)
         self.n.start(50)
+        self.set(0)
+        
     def set(self, value):
-            x=self.limit(-50,50,(9.0*value))
+            x=self.limit(-50,50,(self.gain * (self.offset + value)))
             self.p.ChangeDutyCycle(50+x)
             self.n.ChangeDutyCycle(50-x)
-    def set_gain(gain)
+            
+    def set_gain(self,gain):
         self.gain=gain
         
-def set_gain(offset)
+    def set_offset(self,offset):
         self.offset=offset
         
     def limit(self,lower,upper,x):
@@ -52,10 +55,10 @@ def set_gain(offset)
 
 def main():
     import sys, string
-    
+    import time
 
     time.sleep(1)
-    gm = meter(2,3)
+    gm = meter(14,15)
     fortegn = 1
     if(sys.argv[1:]):
         i = string.atoi(sys.argv[1])
